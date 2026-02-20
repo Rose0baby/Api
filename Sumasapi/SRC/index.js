@@ -1,23 +1,20 @@
 const express = require('express');
 const app = express();
-const morgan = require('morgan');//Muestra las solicitudes HTTP en la consola
-const cors = require('cors');//Permite conexiones externas
-
+const morgan = require('morgan');
+const cors = require('cors');
 
 //configuracion del servidor puerto 3000
-
 app.set('port', process.env.PORT || 3000);
-app.set('json spaces', 2);//Configura el formato de salida JSON con una sangría de 2 espacios
+app.set('json spaces', 2);
 
-
-app.use(morgan('dev'));//Usa morgan para mostrar las solicitudes HTTP en la consola
+app.use(morgan('dev'));
 
 app.listen(app.get('port'), () => {
     console.log("SERVIDOR EN EL PUERTO 3000");
 });
 
-app.use(express.json());//Permite que el servidor entienda las solicitudes con formato JSON
-app.use(cors());//Permite conexiones externas
+app.use(express.json());
+app.use(cors());
 
 app.get('/', (req, res) => {
     res.json({
@@ -25,18 +22,38 @@ app.get('/', (req, res) => {
     });
 });
 
-//comentario ejemplo
+// SUMA
 app.post('/sumar', (req, res) => {
-    const { num1, num2 } = req.body;//se declaran los datos de entrada 
-    
-    //validar que se hayan enviado los dos numeros que no esten vacios
-    if(!num1 || !num2){
-        return res.status(400).json({'error': 'Faltan numeros para sumar'})
+    const { num1, num2 } = req.body;
+
+    if (num1 === undefined || num2 === undefined) {
+        return res.status(400).json({ 'error': 'Faltan numeros para sumar' });
     }
 
-    //Sumar los numeros
     const resultado = num1 + num2;
+    res.send({ resultado });
+});
 
-    //Enviar el resultado al front
-    res.send({ resultado });//se envia el resultado al front
+// RESTA
+app.post('/restar', (req, res) => {
+    const { num1, num2 } = req.body;
+
+    if (num1 === undefined || num2 === undefined) {
+        return res.status(400).json({ 'error': 'Faltan numeros para restar' });
+    }
+
+    const resultado = num1 - num2;
+    res.send({ resultado });
+});
+
+// MULTIPLICACIÓN
+app.post('/multiplicar', (req, res) => {
+    const { num1, num2 } = req.body;
+
+    if (num1 === undefined || num2 === undefined) {
+        return res.status(400).json({ 'error': 'Faltan numeros para multiplicar' });
+    }
+
+    const resultado = num1 * num2;
+    res.send({ resultado });
 });
